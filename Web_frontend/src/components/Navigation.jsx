@@ -2,7 +2,6 @@ import { Moon, Sun, Sparkles, Compass, Map, MessageSquare, Grid, User } from "lu
 import { Button } from "./ui/button";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-
 export default function Navigation({ darkMode, setDarkMode }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,21 +13,21 @@ export default function Navigation({ darkMode, setDarkMode }) {
       {/* Top Navigation - Desktop */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl shadow-lg px-4 md:px-6 py-3 border border-gray-200/50 dark:border-gray-700/50">
+          <div className="glass nav-modern rounded-2xl shadow-xl px-4 md:px-6 py-3">
             <div className="flex items-center justify-between">
               {/* Logo */}
               <button
                 onClick={() => navigate('/')}
                 className="flex items-center gap-2 group"
               >
-                <div className="bg-gradient-to-br from-green-400 to-blue-500 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                <div className="btn-primary p-2 rounded-xl group-hover:scale-110 transition-transform shadow-lg">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <span className="hidden md:block">LocalLens</span>
+                <span className="hidden md:block text-gradient-primary font-bold text-xl">LocalLens</span>
               </button>
 
               {/* Nav Links - Desktop */}
-              <div className="hidden md:flex items-center gap-1">
+              <div className="hidden md:flex items-center gap-2">
                 <NavLink 
                   active={getActive('/')} 
                   to="/"
@@ -66,7 +65,7 @@ export default function Navigation({ darkMode, setDarkMode }) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setDarkMode(!darkMode)}
-                className="rounded-xl"
+                className="rounded-xl hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 hover:text-white transition-all"
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </Button>
@@ -77,7 +76,7 @@ export default function Navigation({ darkMode, setDarkMode }) {
 
       {/* Bottom Navigation - Mobile */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4">
-        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg rounded-2xl shadow-2xl px-2 py-3 border border-gray-200/50 dark:border-gray-700/50">
+        <div className="glass nav-modern rounded-2xl shadow-2xl px-2 py-3">
           <div className="flex items-center justify-around">
             <MobileNavButton
               icon={Compass}
@@ -120,10 +119,10 @@ function NavLink({ active, to, children }) {
   return (
     <Link
       to={to}
-      className={`px-4 py-2 rounded-xl transition-all ${
+      className={`px-4 py-2 rounded-xl font-medium transition-all ${
         active
-          ? 'bg-gradient-to-r from-green-400 to-blue-500 text-white'
-          : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+          ? 'btn-primary text-white shadow-lg scale-105'
+          : 'hover:bg-gradient-to-r hover:from-cyan-100 hover:to-blue-100 dark:hover:from-cyan-900/30 dark:hover:to-blue-900/30'
       }`}
     >
       {children}
@@ -144,14 +143,14 @@ function MobileNavButton({
     >
       <div className={`p-2 rounded-xl transition-all ${
         active
-          ? 'bg-gradient-to-r from-green-400 to-blue-500 text-white scale-110'
-          : 'text-gray-600 dark:text-gray-400 group-hover:bg-gray-100 dark:group-hover:bg-gray-800'
+          ? 'btn-primary text-white scale-110 shadow-lg glow-primary'
+          : 'text-gray-600 dark:text-gray-400 group-hover:bg-gradient-to-r group-hover:from-cyan-100 group-hover:to-blue-100 dark:group-hover:from-cyan-900/30 dark:group-hover:to-blue-900/30'
       }`}>
         <Icon className="w-5 h-5" />
       </div>
-      <span className={`transition-all ${
+      <span className={`text-xs font-medium transition-all ${
         active
-          ? 'text-green-600 dark:text-green-400'
+          ? 'text-gradient-primary font-semibold'
           : 'text-gray-600 dark:text-gray-400'
       }`}>
         {label}

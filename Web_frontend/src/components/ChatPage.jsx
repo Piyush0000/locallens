@@ -6,10 +6,7 @@ import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Avatar } from "./ui/avatar";
-
 import { featuredPlaces } from "../data/mockData";
-
-
 
 export default function ChatPage({ navigate }) {
   const [messages, setMessages] = useState([

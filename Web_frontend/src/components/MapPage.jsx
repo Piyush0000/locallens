@@ -9,8 +9,6 @@ import { Slider } from "./ui/slider";
 import { featuredPlaces, categories } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-
-
 export default function MapPage({ selectedPlace, navigate }) {
   const [activePin, setActivePin] = useState(selectedPlace?.id || null);
   const [showFilters, setShowFilters] = useState(false);

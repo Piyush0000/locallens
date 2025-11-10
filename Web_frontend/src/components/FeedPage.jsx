@@ -8,8 +8,6 @@ import { Avatar } from "./ui/avatar";
 import { communityPosts } from "../data/mockData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-
-
 export default function FeedPage() {
   const [likedPosts, setLikedPosts] = useState([]);
 

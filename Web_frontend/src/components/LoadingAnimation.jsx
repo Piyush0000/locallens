@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 export default function LoadingAnimation() {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-beige-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 z-50">
+    <div className="fixed inset-0 flex items-center justify-center gradient-mesh bg-gradient-to-br from-cyan-50 via-blue-50 to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 z-50">
       <div className="text-center">
         <motion.div
           animate={{
@@ -17,8 +17,8 @@ export default function LoadingAnimation() {
           }}
           className="inline-block mb-4"
         >
-          <div className="bg-gradient-to-br from-green-400 to-blue-500 p-6 rounded-3xl shadow-2xl">
-            <Sparkles className="w-12 h-12 text-white" />
+          <div className="btn-primary p-8 rounded-3xl shadow-2xl glow-primary">
+            <Sparkles className="w-16 h-16 text-white" />
           </div>
         </motion.div>
         
@@ -27,8 +27,8 @@ export default function LoadingAnimation() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h2 className="text-gray-900 dark:text-white mb-2">Scanning your surroundings...</h2>
-          <div className="flex items-center justify-center gap-1">
+          <h2 className="text-2xl font-bold text-gradient-primary mb-4">Scanning your surroundings...</h2>
+          <div className="flex items-center justify-center gap-2">
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
@@ -40,7 +40,7 @@ export default function LoadingAnimation() {
                   repeat: Infinity,
                   delay: i * 0.2,
                 }}
-                className="w-2 h-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full"
+                className="w-3 h-3 btn-primary rounded-full shadow-lg"
               />
             ))}
           </div>
