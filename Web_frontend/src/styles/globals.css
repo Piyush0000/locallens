@@ -205,3 +205,218 @@ html {
     border: 1px solid rgba(148, 163, 184, 0.1);
   }
 }
+
+
+
+
+/* Enhanced Form Styles for Professional Look */
+@layer utilities {
+  .form-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      0 2px 8px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .dark .form-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .input-elegant {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  }
+
+  .dark .input-elegant {
+    background: rgba(30, 41, 59, 0.8);
+    border: 2px solid rgba(51, 65, 85, 0.8);
+  }
+
+  .input-elegant:focus {
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 
+      0 0 0 3px rgba(16, 185, 129, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .dark .input-elegant:focus {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: #34d399;
+    box-shadow: 
+      0 0 0 3px rgba(52, 211, 153, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-gradient-primary {
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    background-size: 200% 200%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 4px 16px rgba(16, 185, 129, 0.3),
+      0 2px 8px rgba(59, 130, 246, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gradient-primary:hover {
+    background-position: 100% 100%;
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 24px rgba(16, 185, 129, 0.4),
+      0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .btn-gradient-primary:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 2px 8px rgba(16, 185, 129, 0.3),
+      0 1px 4px rgba(59, 130, 246, 0.2);
+  }
+
+  .btn-outline-elegant {
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+  }
+
+  .dark .btn-outline-elegant {
+    border: 2px solid rgba(51, 65, 85, 0.8);
+    background: rgba(30, 41, 59, 0.6);
+  }
+
+  .btn-outline-elegant:hover {
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .btn-outline-elegant:hover {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: #34d399;
+  }
+
+  .social-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid rgba(226, 232, 240, 0.6);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark .social-btn {
+    background: rgba(30, 41, 59, 0.7);
+    border: 2px solid rgba(51, 65, 85, 0.6);
+  }
+
+  .social-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #e2e8f0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .social-btn:hover {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: #475569;
+  }
+
+  .divider-elegant {
+    background: linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.5) 50%, transparent 100%);
+  }
+
+  .dark .divider-elegant {
+    background: linear-gradient(90deg, transparent 0%, rgba(51, 65, 85, 0.5) 50%, transparent 100%);
+  }
+
+  .checkbox-modern {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.2s ease;
+  }
+
+  .dark .checkbox-modern {
+    background: rgba(30, 41, 59, 0.8);
+    border: 2px solid rgba(51, 65, 85, 0.8);
+  }
+
+  .checkbox-modern:checked {
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    border-color: transparent;
+  }
+
+  .terms-box {
+    background: linear-gradient(135deg, rgba(241, 245, 249, 0.6) 0%, rgba(248, 250, 252, 0.4) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(226, 232, 240, 0.4);
+  }
+
+  .dark .terms-box {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%);
+    border: 1px solid rgba(51, 65, 85, 0.4);
+  }
+
+  /* Loading animation enhancement */
+  .loading-spinner {
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Enhanced badge style */
+  .badge-premium {
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+
+  /* Text link enhancements */
+  .text-link {
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .text-link:hover {
+    background: linear-gradient(135deg, #059669, #2563eb);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+/* Enhanced background gradients */
+.auth-background {
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 50%, #faf5ff 100%);
+}
+
+.dark .auth-background {
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(236, 72, 153, 0.03) 0%, transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e1b4b 100%);
+}

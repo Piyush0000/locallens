@@ -64,6 +64,8 @@ export default function LandingPage({ setSelectedPlace, navigate }) {
 
         {/* Hero Section */}
 
+        
+
 
 
         <motion.div
