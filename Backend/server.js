@@ -1,6 +1,7 @@
 // server.js
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import placeRoutes from './routes/placeRoutes.js';
@@ -12,6 +13,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// CORS Configuration
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies for incoming requests
 app.use(express.json());

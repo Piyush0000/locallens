@@ -150,8 +150,8 @@ function MobileNavButton({
       </div>
       <span className={`text-xs font-medium transition-all ${
         active
-          ? 'text-gradient-primary font-semibold'
-          : 'text-gray-600 dark:text-gray-400'
+          ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 font-semibold'
+          : 'text-cyan-200'
       }`}>
         {label}
       </span>

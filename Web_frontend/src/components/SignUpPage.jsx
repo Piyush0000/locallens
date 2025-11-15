@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { authAPI } from "../utils/api";
+import { toast } from "sonner";
 
 export default function SignUpPage({ navigate, setUser }) {
   const [formData, setFormData] = useState({
@@ -30,31 +32,41 @@ export default function SignUpPage({ navigate, setUser }) {
 
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match!");
+      toast.error("Passwords don't match!");
       setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters long!");
+      toast.error("Password must be at least 6 characters long!");
       setIsLoading(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const userData = {
-        id: Date.now().toString(),
+    try {
+      const userData = await authAPI.register({
         name: formData.fullName,
         email: formData.email,
+        password: formData.password
+      });
+      
+      setUser({
+        id: userData._id,
+        name: userData.name,
+        email: userData.email,
+        avatar: userData.avatar,
         joinDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
         location: "Add your location"
-      };
+      });
       
-      setUser(userData);
+      toast.success("Account created successfully! Welcome! 🎉");
       setIsLoading(false);
       navigate('/');
-    }, 1500);
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   return (

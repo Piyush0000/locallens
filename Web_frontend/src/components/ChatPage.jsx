@@ -7,6 +7,7 @@ import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Avatar } from "./ui/avatar";
 import { featuredPlaces } from "../data/mockData";
+import { delhiPlaces } from "../data/delhiPlaces";
 
 export default function ChatPage({ navigate }) {
   const [messages, setMessages] = useState([
@@ -48,16 +49,16 @@ export default function ChatPage({ navigate }) {
     setTimeout(() => {
       const aiResponses = [
         {
-          message: "I found some amazing spots for you! Here are my top recommendations based on what you're looking for:",
-          suggestions: featuredPlaces.slice(0, 3)
+          message: "I found some amazing spots in Delhi for you! Here are my top recommendations:",
+          suggestions: delhiPlaces.slice(0, 3)
         },
         {
-          message: "Based on your preferences, I think you'll love these peaceful cafes perfect for studying:",
-          suggestions: featuredPlaces.filter(p => p.category === 'cafe' || p.category === 'study').slice(0, 2)
+          message: "Based on your preferences, I think you'll love these peaceful places perfect for relaxation:",
+          suggestions: delhiPlaces.filter(p => p.category === 'cafe' || p.category === 'park').slice(0, 2)
         },
         {
-          message: "Here are some hidden gems that match your vibe! These places are local favorites:",
-          suggestions: featuredPlaces.slice(3, 6)
+          message: "Here are some hidden gems in Delhi that match your vibe! These places are local favorites:",
+          suggestions: delhiPlaces.slice(5, 8)
         }
       ];
 
@@ -77,10 +78,10 @@ export default function ChatPage({ navigate }) {
   };
 
   const suggestedPrompts = [
-    "Suggest a peaceful café for studying",
-    "Show me romantic rooftop spots",
-    "Find hidden art galleries nearby",
-    "Where can I work remotely with good wifi?"
+    "Find peaceful cafes in Hauz Khas",
+    "Show me historic monuments in Delhi",
+    "Best art galleries and creative spaces",
+    "Where can I find authentic street food?"
   ];
 
   return (
@@ -99,8 +100,8 @@ export default function ChatPage({ navigate }) {
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-900" />
               </div>
               <div>
-                <h2 className="text-gray-900 dark:text-white">LocalLens AI</h2>
-                <p className="text-gray-500 dark:text-gray-400">Your Travel Buddy</p>
+                <h2 className="text-purple-100">LocalLens AI</h2>
+                <p className="text-cyan-200">Your Travel Buddy</p>
               </div>
             </div>
 
@@ -130,14 +131,14 @@ export default function ChatPage({ navigate }) {
                           <Sparkles className="w-4 h-4 text-white" />
                         </div>
                       </Avatar>
-                      <span className="text-gray-600 dark:text-gray-400">LocalLens AI</span>
+                      <span className="text-cyan-200">LocalLens AI</span>
                     </div>
                   )}
 
                   <div className={`rounded-2xl p-4 ${
                     message.type === 'user'
                       ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white ml-auto'
-                      : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-md'
+                      : 'bg-gradient-to-br from-purple-900/40 to-cyan-900/40 text-purple-100 shadow-md border border-purple-500/30'
                   }`}>
                     <p>{message.message}</p>
                   </div>
@@ -160,8 +161,8 @@ export default function ChatPage({ navigate }) {
                                 className="w-20 h-20 object-cover rounded-xl"
                               />
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-gray-900 dark:text-white mb-1">{place.name}</h4>
-                                <p className="text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+                                <h4 className="text-purple-100 mb-1">{place.name}</h4>
+                                <p className="text-cyan-200 mb-2 line-clamp-1">
                                   {place.description}
                                 </p>
                                 <div className="flex items-center gap-2">
@@ -231,8 +232,8 @@ export default function ChatPage({ navigate }) {
 
         {/* Suggested Prompts */}
         {messages.length === 1 && (
-          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg p-4 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-gray-600 dark:text-gray-400 mb-3">Try asking:</p>
+          <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg p-4 border-t border-purple-500/30">
+            <p className="text-cyan-200 mb-3">Try asking:</p>
             <div className="flex flex-wrap gap-2">
               {suggestedPrompts.map((prompt) => (
                 <Button

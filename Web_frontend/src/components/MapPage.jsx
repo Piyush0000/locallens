@@ -1,23 +1,92 @@
-import { useState } from "react";
-import { MapPin, Star, X, Filter, Navigation, Sparkles, Heart, Share2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MapPin, Star, X, Filter, Navigation, Sparkles, Heart, Share2, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Card } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Slider } from "./ui/slider";
 import { featuredPlaces, categories } from "../data/mockData";
+import { delhiPlaces, DELHI_CENTER, DELHI_ZOOM } from "../data/delhiPlaces";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { placesAPI } from "../utils/api";
+import { toast } from "sonner";
 
-export default function MapPage({ selectedPlace, navigate }) {
+// Fix Leaflet default marker icon issue
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// Custom marker icon
+const createCustomIcon = (isActive) => new L.DivIcon({
+  className: 'custom-marker',
+  html: `<div class="${isActive ? 'marker-active' : 'marker-default'}">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+    </svg>
+  </div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32]
+});
+
+// Component to handle map center
+function MapUpdater({ center }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.setView(center, map.getZoom());
+    }
+  }, [center, map]);
+  return null;
+}
+
+export default function MapPage({ selectedPlace, navigate, user }) {
   const [activePin, setActivePin] = useState(selectedPlace?.id || null);
   const [showFilters, setShowFilters] = useState(false);
-  const [distance, setDistance] = useState([2]);
+  const [distance, setDistance] = useState([5]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [hiddenGemsOnly, setHiddenGemsOnly] = useState(false);
+  const [mapCenter, setMapCenter] = useState(DELHI_CENTER);
+  const [places, setPlaces] = useState(delhiPlaces);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Try to get user's location, but default to Delhi
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+          // Check if user is near Delhi (within 50km)
+          const distanceFromDelhi = Math.sqrt(
+            Math.pow(userLat - DELHI_CENTER[0], 2) + 
+            Math.pow(userLon - DELHI_CENTER[1], 2)
+          ) * 111; // Convert to km
+          
+          if (distanceFromDelhi < 50) {
+            setMapCenter([userLat, userLon]);
+            toast.success('📍 Location detected! Showing places near you in Delhi');
+          } else {
+            toast.info('🗺️ Showing Delhi locations. You can explore places across the city!');
+          }
+        },
+        (error) => {
+          console.log('Geolocation error:', error);
+          toast.info('🗺️ Showing Delhi locations. Enable location for personalized results!');
+        }
+      );
+    }
+  }, []);
 
   const selectedPlaceData = activePin 
-    ? featuredPlaces.find(p => p.id === activePin) 
+    ? places.find(p => p.id === activePin) 
     : null;
 
   return (
@@ -46,23 +115,23 @@ export default function MapPage({ selectedPlace, navigate }) {
 
               {/* Distance Slider */}
               <div className="mb-6">
-                <label className="text-gray-900 dark:text-white mb-3 block">
-                  Distance: {distance[0]} miles
+                <label className="text-purple-100 mb-3 block font-semibold">
+                  Distance: {distance[0]} km
                 </label>
                 <Slider
                   value={distance}
                   onValueChange={setDistance}
-                  max={10}
-                  min={0.5}
-                  step={0.5}
+                  max={15}
+                  min={1}
+                  step={1}
                   className="mb-4"
                 />
               </div>
 
               {/* Categories */}
               <div className="mb-6">
-                <label className="text-gray-900 dark:text-white mb-3 block">
-                  Type
+                <label className="text-purple-100 mb-3 block font-semibold">
+                  Category
                 </label>
                 <div className="space-y-3">
                   {categories.slice(0, 4).map((category) => (
@@ -78,7 +147,7 @@ export default function MapPage({ selectedPlace, navigate }) {
                           }
                         }}
                       />
-                      <label htmlFor={category.id} className="text-gray-700 dark:text-gray-300 cursor-pointer flex items-center gap-2">
+                      <label htmlFor={category.id} className="text-cyan-200 cursor-pointer flex items-center gap-2">
                         <span>{category.emoji}</span>
                         {category.name}
                       </label>
@@ -95,7 +164,7 @@ export default function MapPage({ selectedPlace, navigate }) {
                     checked={hiddenGemsOnly}
                     onCheckedChange={(checked) => setHiddenGemsOnly(checked)}
                   />
-                  <label htmlFor="hidden-gems" className="text-gray-700 dark:text-gray-300 cursor-pointer">
+                  <label htmlFor="hidden-gems" className="text-cyan-200 cursor-pointer">
                     Hidden Gems Only ✨
                   </label>
                 </div>
@@ -103,7 +172,7 @@ export default function MapPage({ selectedPlace, navigate }) {
 
               {/* Popularity */}
               <div className="mb-6">
-                <label className="text-gray-900 dark:text-white mb-3 block">
+                <label className="text-purple-100 mb-3 block font-semibold">
                   Sort by
                 </label>
                 <div className="space-y-2">
@@ -123,90 +192,51 @@ export default function MapPage({ selectedPlace, navigate }) {
         </AnimatePresence>
 
         {/* Map Container */}
-        <div className="h-full bg-gradient-to-br from-green-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 relative overflow-hidden">
-          {/* Simulated Map Background */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `repeating-linear-gradient(0deg, #cbd5e0 0px, #cbd5e0 1px, transparent 1px, transparent 40px),
-                               repeating-linear-gradient(90deg, #cbd5e0 0px, #cbd5e0 1px, transparent 1px, transparent 40px)`
-            }} />
-          </div>
-
-          {/* Map Pins */}
-          {featuredPlaces.map((place, index) => {
-            const positions = [
-              { top: '25%', left: '30%' },
-              { top: '40%', left: '55%' },
-              { top: '60%', left: '35%' },
-              { top: '35%', left: '70%' },
-              { top: '70%', left: '50%' },
-              { top: '45%', left: '25%' },
-              { top: '55%', left: '65%' },
-              { top: '30%', left: '45%' },
-            ];
-
-            return (
-              <motion.div
-                key={place.id}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.1, type: "spring" }}
-                className="absolute cursor-pointer group"
-                style={positions[index]}
-                onClick={() => setActivePin(place.id)}
-              >
-                <div className={`relative ${activePin === place.id ? 'z-30' : 'z-20'}`}>
-                  {/* Pin */}
-                  <motion.div
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all ${
-                      activePin === place.id
-                        ? 'bg-gradient-to-br from-green-500 to-blue-500 ring-4 ring-white dark:ring-slate-900'
-                        : 'bg-gradient-to-br from-green-400 to-blue-400 hover:from-green-500 hover:to-blue-500'
-                    }`}
-                  >
-                    <MapPin className="w-6 h-6 text-white fill-white" />
-                  </motion.div>
-
-                  {/* Pulse Animation */}
-                  {activePin === place.id && (
-                    <motion.div
-                      initial={{ scale: 1, opacity: 0.5 }}
-                      animate={{ scale: 2, opacity: 0 }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className="absolute inset-0 bg-gradient-to-br from-green-400 to-blue-400 rounded-full"
-                    />
-                  )}
-
-                  {/* Mini Card on Hover */}
-                  {activePin !== place.id && (
-                    <div className="absolute left-14 top-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      <Card className="w-64 shadow-2xl border-0 overflow-hidden bg-white dark:bg-slate-800">
-                        <div className="relative h-32">
-                          <ImageWithFallback
-                            src={place.image}
-                            alt={place.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="p-3">
-                          <h4 className="text-gray-900 dark:text-white mb-1">{place.name}</h4>
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            <span>{place.rating}</span>
-                            <span>•</span>
-                            <span>{place.distance}</span>
-                          </div>
-                          <p className="text-gray-600 dark:text-gray-400 mt-2">{place.description}</p>
-                        </div>
-                      </Card>
+        <div className="h-full relative overflow-hidden rounded-2xl">
+          <MapContainer 
+            center={mapCenter} 
+            zoom={DELHI_ZOOM} 
+            style={{ height: '100%', width: '100%' }}
+            className="z-10 rounded-2xl overflow-hidden"
+          >
+            {/* Dark theme tiles */}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            />
+            
+            <MapUpdater center={mapCenter} />
+            
+            {/* Place Markers */}
+            {places.map((place, index) => {
+              const lat = place.lat;
+              const lon = place.lon;
+              
+              return (
+                <Marker
+                  key={place.id}
+                  position={[lat, lon]}
+                  icon={createCustomIcon(activePin === place.id)}
+                  eventHandlers={{
+                    click: () => setActivePin(place.id),
+                  }}
+                >
+                  <Popup className="custom-popup">
+                    <div className="p-2">
+                      <h4 className="font-bold text-gray-900 mb-1">{place.name}</h4>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        <span>{place.rating}</span>
+                        <span>•</span>
+                        <span>{place.distance}</span>
+                      </div>
+                      <p className="text-sm text-gray-600">{place.description}</p>
                     </div>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
         </div>
 
         {/* Filter Button */}
@@ -268,17 +298,17 @@ export default function MapPage({ selectedPlace, navigate }) {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h2 className="text-gray-900 dark:text-white mb-1">
+                      <h2 className="text-purple-100 mb-1">
                         {selectedPlaceData.name}
                       </h2>
-                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-2 text-cyan-200">
                         <MapPin className="w-4 h-4" />
                         <span>{selectedPlaceData.distance} away</span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  <p className="text-cyan-200 mb-4">
                     {selectedPlaceData.description}
                   </p>
 

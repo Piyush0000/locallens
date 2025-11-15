@@ -12,7 +12,7 @@ import LoadingAnimation from "./components/LoadingAnimation";
 import { Toaster } from "./components/ui/sonner";
 
 function AppContent() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -57,7 +57,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen gradient-mesh bg-gradient-to-br from-cyan-50 via-blue-50 to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
+    <div className="min-h-screen animated-gradient-bg transition-all duration-700">
       {/* Navigation - Always visible */}
       <Navigation
         darkMode={darkMode}

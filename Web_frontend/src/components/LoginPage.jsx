@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { authAPI } from "../utils/api";
+import { toast } from "sonner";
 
 export default function LoginPage({ navigate, setUser }) {
   const [formData, setFormData] = useState({
@@ -25,20 +27,29 @@ export default function LoginPage({ navigate, setUser }) {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const userData = {
-        id: "1",
-        name: "Alex Thompson",
+    try {
+      const userData = await authAPI.login({
         email: formData.email,
-        joinDate: "January 2024",
-        location: "New Delhi, India"
-      };
+        password: formData.password
+      });
       
-      setUser(userData);
+      setUser({
+        id: userData._id,
+        name: userData.name,
+        email: userData.email,
+        avatar: userData.avatar,
+        joinDate: "Member since " + new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        location: "New Delhi, India"
+      });
+      
+      toast.success("Welcome back! 🎉");
       setIsLoading(false);
       navigate('/');
-    }, 1500);
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   const handleDemoLogin = () => {
